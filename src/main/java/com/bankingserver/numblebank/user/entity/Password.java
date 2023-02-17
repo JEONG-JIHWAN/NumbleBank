@@ -1,5 +1,7 @@
 package com.bankingserver.numblebank.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +12,8 @@ import lombok.RequiredArgsConstructor;
 public class Password {
     private final String value;
 
-    public static Password valueOf(String value) {
+    @JsonCreator
+    public static Password valueOf(@JsonProperty("password") String value) {
         return new Password(value);
     }
 
