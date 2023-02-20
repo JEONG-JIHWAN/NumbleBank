@@ -17,7 +17,7 @@ public class User extends BaseEntity {
     private UserId userId;
     @Column(columnDefinition = "varchar(80)", nullable = false)
     private String password;
-    
+
     public User(UserId userId, String password) {
         this.userId = userId;
         this.password = password;
