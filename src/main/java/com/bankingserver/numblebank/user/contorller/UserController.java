@@ -19,13 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    @PostMapping ("sign-up")
+    @PostMapping ("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     public void signUp(@RequestBody SignUpRequest signUpRequest) {
         userService.join(signUpRequest);
     }
 
     @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> signIn(@RequestBody SignInRequest signInRequest) {
 
         String token = userService.login(signInRequest);
