@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,12 +38,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = request.getHeader(JwtProperties.HEADER_STRING)
                     .replace(JwtProperties.TOKEN_PREFIX, "");
             String username = JWT.require(Algorithm.HMAC256(JwtProperties.SECRET)).build().verify(token).getClaim("username").asString();
-            User user = userRepository.findByUserId(UserId.valueOf(username));
-            if(user == null) {
+            Optional<User> user = userRepository.findByUserId(UserId.valueOf(username));
+            if(user.isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
-            PrincipalDetails principalDetails = new PrincipalDetails(user);
+            PrincipalDetails principalDetails = new PrincipalDetails(user.get());
             Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (JWTVerificationException e) {

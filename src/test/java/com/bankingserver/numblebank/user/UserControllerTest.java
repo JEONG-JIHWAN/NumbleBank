@@ -11,6 +11,7 @@ import com.bankingserver.numblebank.user.entity.UserId;
 import com.bankingserver.numblebank.user.repository.UserRepository;
 import com.bankingserver.numblebank.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -50,8 +51,8 @@ public class UserControllerTest {
                 .content(requestBody))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
 
-        User user = userRepository.findByUserId(userId);
-        Assertions.assertNotNull(user);
+        Optional<User> user = userRepository.findByUserId(userId);
+        Assertions.assertTrue(user.isPresent());
     }
 
     @DisplayName("로그인 - 성공")
