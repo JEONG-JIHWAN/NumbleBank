@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConnectionController {
     private final ConnectionService connectionService;
     @PostMapping("add")
-    public void addFriends(@CurrentUser User user, @RequestBody Map<String, List<UserId>> addFriendRequest){
-        List<UserId> receiverIds = addFriendRequest.get("receiverIds");
-        connectionService.addFriends(user, receiverIds);
+    public void addFriend(@CurrentUser User user, @RequestBody Map<String, UserId> addFriendRequest){
+        UserId receiverId = addFriendRequest.get("receiverId");
+        connectionService.addFriend(user, receiverId);
     }
-    
+
 }
