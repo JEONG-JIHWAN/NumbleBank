@@ -18,11 +18,9 @@ public class ConnectionService {
     private final UserRepository userRepository;
 
 
-    public void addFriends(User user, List<UserId> receiverUserIds) {
-        receiverUserIds.stream().forEach(receiverUserId ->
-        {
-            Optional<User> receiver = userRepository.findByUserId(receiverUserId);
-            receiver.ifPresent( r-> connectionRepository.save(new Connection(user, r)));
-        });
+    public void addFriend(User user, UserId receiverUserId) {
+        Optional<User> receiver = userRepository.findByUserId(receiverUserId);
+        receiver.ifPresent( r-> connectionRepository.save(new Connection(user, r)));
+
     }
 }
