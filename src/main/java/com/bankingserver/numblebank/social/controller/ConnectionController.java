@@ -23,8 +23,14 @@ public class ConnectionController {
     private final ConnectionService connectionService;
     @PostMapping("add")
     public void addFriend(@CurrentUser User user, @RequestBody Map<String, UserId> addFriendRequest){
-        UserId receiverId = addFriendRequest.get("receiverId");
-        connectionService.addFriend(user, receiverId);
+        UserId receiverUserId = addFriendRequest.get("receiverId");
+        connectionService.addFriend(user, receiverUserId);
+    }
+
+    @PostMapping("/approve")
+    public void approveRequest(@CurrentUser User user, @RequestBody Map<String, Long> approvedFriendRequest) {
+        Long approvedId = approvedFriendRequest.get("approvedId");
+        connectionService.approveFriend(user, approvedId);
     }
 
 }
