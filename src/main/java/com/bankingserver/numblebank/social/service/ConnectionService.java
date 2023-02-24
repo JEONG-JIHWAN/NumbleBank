@@ -36,6 +36,10 @@ public class ConnectionService {
         connectionRepository.save(Connection.approveConnection(approvedUser, user));
     }
 
+    public List<Connection> findAllConnectedUser(User user) {
+        return connectionRepository.findAllConnectionByUser(user);
+    }
+
     private User checkExistsUserById(Long id) {
         Optional<User> byId= userRepository.findById(id);
         if(byId.isEmpty()){

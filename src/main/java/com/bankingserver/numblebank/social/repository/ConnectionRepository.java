@@ -11,4 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface ConnectionRepository extends JpaRepository<Connection, Long> {
     @Query("select c from Connection c join c.requester join c.receiver where c.requester = :requester and c.receiver = :receiver")
     Connection findByRequesterAndReceiver(@Param("requester") User requester, @Param("receiver") User receiver);
+
+    @Query("select c from Connection c join fetch c.receiver where c.requester = :user and c.approve = true")
+    List<Connection> findAllConnectionByUser(@Param("user") User user);
 }
