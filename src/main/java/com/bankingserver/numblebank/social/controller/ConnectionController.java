@@ -33,4 +33,11 @@ public class ConnectionController {
         connectionService.approveFriend(user, approvedId);
     }
 
+    @GetMapping("/connections")
+    public List<ConnectedUserDto> getConnections(@CurrentUser User user) {
+        return connectionService.findAllConnectedUser(user)
+                .stream().map(c -> new ConnectedUserDto(c))
+                .collect(Collectors.toList());
+    }
+
 }
