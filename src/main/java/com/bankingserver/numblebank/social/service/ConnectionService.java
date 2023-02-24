@@ -36,6 +36,11 @@ public class ConnectionService {
         connectionRepository.save(Connection.approveConnection(approvedUser, user));
     }
 
+    @Transactional
+    public void deleteConnection(Long rejectedId) {
+        connectionRepository.deleteByIdAndApproveFalse(rejectedId);
+    }
+
     public List<Connection> findAllConnectedUser(User user) {
         return connectionRepository.findAllConnectionByUser(user);
     }
