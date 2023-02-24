@@ -28,9 +28,15 @@ public class ConnectionController {
     }
 
     @PostMapping("/approve")
-    public void approveRequest(@CurrentUser User user, @RequestBody Map<String, Long> approvedFriendRequest) {
+    public void approveFriend(@CurrentUser User user, @RequestBody Map<String, Long> approvedFriendRequest) {
         Long approvedId = approvedFriendRequest.get("approvedId");
         connectionService.approveFriend(user, approvedId);
+    }
+
+    @PostMapping("/reject")
+    public void rejectFriend(@RequestBody Map<String, Long> rejectedConnectionRequest) {
+        Long connectionId = rejectedConnectionRequest.get("rejectedConnectionId");
+        connectionService.deleteConnection(connectionId);
     }
 
     @GetMapping("/connections")
