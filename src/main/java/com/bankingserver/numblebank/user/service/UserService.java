@@ -1,26 +1,29 @@
 package com.bankingserver.numblebank.user.service;
 
+import com.bankingserver.numblebank.account.entity.AccountPassword;
+import com.bankingserver.numblebank.account.repository.AccountRepository;
+import com.bankingserver.numblebank.account.entity.Account;
 import com.bankingserver.numblebank.user.auth.TokenUtils;
 import com.bankingserver.numblebank.user.dto.SignInRequest;
 import com.bankingserver.numblebank.user.dto.SignUpRequest;
 import com.bankingserver.numblebank.user.entity.User;
 import com.bankingserver.numblebank.user.entity.UserId;
 import com.bankingserver.numblebank.user.repository.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final TokenUtils tokenUtils;
     private final AuthenticationManager authenticationManager;
@@ -39,11 +42,20 @@ public class UserService {
         return tokenUtils.generateJwtToken(authentication);
     }
 
+    public void makeNewAccount(User user, AccountPassword password) {
+        Optional<User> byId = userRepository.findById(user.getId());
+        if(byId.isEmpty()) {
+            throw new IllegalArgumentException("ss");
+        }
+        User userById = byId.get();
+        Account newAccount = Account.createAccount(userById, passwordEncoder.encode(password.getValue()));
+        userById.addAccount(newAccount);
+        accountRepository.save(newAccount);
+    }
+
     private void checkExistUserId(UserId userId) {
         if(userRepository.existsByUserId(userId)){
             throw new IllegalArgumentException("해당 사용자가 이미 존재합니다.");
         }
     }
-
-
 }

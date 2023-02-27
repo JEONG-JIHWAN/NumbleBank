@@ -1,15 +1,16 @@
 package com.bankingserver.numblebank.user.contorller;
 
+import com.bankingserver.numblebank.account.entity.AccountPassword;
 import com.bankingserver.numblebank.user.auth.CurrentUser;
 import com.bankingserver.numblebank.user.auth.JwtProperties;
 import com.bankingserver.numblebank.user.dto.SignInRequest;
 import com.bankingserver.numblebank.user.dto.SignUpRequest;
 import com.bankingserver.numblebank.user.entity.User;
 import com.bankingserver.numblebank.user.service.UserService;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -31,5 +32,11 @@ public class UserController {
 
         String token = userService.login(signInRequest);
         return ResponseEntity.ok().header(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+token).build();
+    }
+
+    @PostMapping("/new-account")
+    public void makeAccount(@CurrentUser User user, @RequestBody Map<String, AccountPassword> makeAccountRequest){
+        userService.makeNewAccount(user, makeAccountRequest.get("password"));
+
     }
 }
